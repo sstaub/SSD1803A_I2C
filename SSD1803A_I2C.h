@@ -6,6 +6,7 @@
 
 #include <Arduino.h>
 #include <Wire.h>
+#include "Print.h"
 
 #define MODE_COMMAND                              0x00
 #define MODE_DATA                                 0x40
