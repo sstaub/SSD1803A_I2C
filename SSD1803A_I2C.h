@@ -24,7 +24,7 @@
 
 #define ADDRESS_CGRAM                             0x40
 #define ADDRESS_DDRAM                             0x80
-#define ADDRESS_DDRAM_DOGS164_TOP_OFFSET          0x04
+#define ADDRESS_DDRAM_DOGS164_TOP_OFFSET          0x0A
 #define ADDRESS_DDRAM_DOGS104_TOP_OFFSET          0x0A
 
 #define COMMAND_8BIT_4LINES_RE1_IS0               0x3A
