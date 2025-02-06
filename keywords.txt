@@ -1,6 +1,8 @@
 SSD1803A_I2C					KEYWORD1
 begin									KEYWORD2
 cls										KEYWORD2
+clr										KEYWORD2
+clp										KEYWORD2
 locate								KEYWORD2
 home									KEYWORD2
 display								KEYWORD2

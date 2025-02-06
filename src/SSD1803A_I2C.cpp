@@ -3,14 +3,14 @@
 
 #include "SSD1803A_I2C.h"
 
-SSD1803A_I2C::SSD1803A_I2C(uint8_t i2cAddr, uint8_t resetPin) {
+SSD1803A_I2C::SSD1803A_I2C(uint8_t i2cAddr, TwoWire &i2cPort) {
 	this->i2cAddr = i2cAddr;
-	this->resetPin = resetPin;
+	this->i2cPort = &i2cPort;
 	}
 
-void SSD1803A_I2C::begin(display_t id) {
-	i2cPort = &Wire;
+void SSD1803A_I2C::begin(display_t id, uint8_t resetPin) {
 	this->id = id;
+	this->resetPin = resetPin;
 	switch (id) {
 		case DOGM204:
 			columns = 20;
@@ -35,9 +35,8 @@ void SSD1803A_I2C::begin(display_t id) {
 	sendCommand(COMMAND_ENTRY_MODE_SET | entrymode);
 	}
 
-void SSD1803A_I2C::begin(TwoWire &i2cPort, display_t id) {
+void SSD1803A_I2C::begin(display_t id) {
 	this->id = id;
-	this->i2cPort = &i2cPort;
 	switch (id) {
 		case DOGM204:
 			columns = 20;
@@ -54,7 +53,7 @@ void SSD1803A_I2C::begin(TwoWire &i2cPort, display_t id) {
 		}
 	ddramStart = ADDRESS_DDRAM;
 	lines = 4;
-	i2cPort.begin();
+	i2cPort->begin();
 	reset();
 	init();
 	cls();
@@ -106,11 +105,31 @@ void SSD1803A_I2C::cls() {
 	sendCommand(COMMAND_CLEAR_DISPLAY);
 	}
 
+void SSD1803A_I2C::clr(uint8_t row) {
+	for (uint8_t pos = 0; pos < columns; pos++) {
+		locate(row, pos);
+		write(' ');
+		}
+	locate(row, 0);
+	}
+
+void SSD1803A_I2C::clp(uint8_t row, uint8_t column, uint8_t numbers) {
+	for (uint8_t pos = column; pos < (column + numbers); pos++) {
+		locate(row, pos);
+		write(' ');
+		}
+	locate(row, column);
+	}
+
 void SSD1803A_I2C::home() {
 	sendCommand(COMMAND_RETURN_HOME);
 	}
 
 void SSD1803A_I2C::locate(uint8_t row, uint8_t column) {
+	if(OFFSET == 1) {
+		row = row - 1;
+		column = column - 1;
+		}
 	sendCommand(ddramStart | (row * 0x20 + column));
 	}
 

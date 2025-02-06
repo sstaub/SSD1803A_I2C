@@ -1,0 +1,9 @@
+name=SSD1803A_I2C
+version=2.0.0
+author=Stefan Staub
+maintainer= https://github.com/sstaub/SSD1803A_I2C
+sentence=LCD library for EA DOGM displays with SSD1803a controller using the i2c interface display.
+paragraph=The library implements base functions of LiquidCrystal library for EA DOGM LCD Display with SSD1803a controller using the I2C interface
+category=Display
+url=https://github.com/sstaub/SSD1803_I2C
+architectures=*

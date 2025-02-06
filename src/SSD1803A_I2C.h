@@ -1,12 +1,30 @@
-//	EA DOGM204 / DOGS164 / DOGS104 LCD Display with SSD1803A controller for 4x20
-//	Copyright(C) 2022 Stefan Staub under MIT license
+/**	EA DOGM204 / DOGS164 / DOGS104 LCD Display with SSD1803A controller for 4x20
+ *Copyright(C) 2025 Stefan Staub under MIT license
+
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
 
 #ifndef SSD1803A_I2C_H
 #define SSD1803A_I2C_H
 
 #include <Arduino.h>
 #include <Wire.h>
-#include "Print.h"
 
 #define MODE_COMMAND                              0x00
 #define MODE_DATA                                 0x40
@@ -79,6 +97,8 @@
 #define COMMAND_ROM_B                             0x04
 #define COMMAND_ROM_C                             0x08
 
+#define OFFSET 1
+
 typedef enum {
 	DOGM204,
 	DOGS164,
@@ -118,25 +138,41 @@ public:
 	/**
 	 * @brief Construct a new ssd1803a i2c object
 	 * 
-	 * @param i2cAddr 0x3D (SA0 = VDD) or 0x3C (SA0 = VSS)
-	 * @param resetPin if available
+	 * @param i2cAddr 0x3D (SA0 = VDD) or 0x3C (SA0 = VSS/GND)
+	 * @param i2cPort alternatives I2C Ports, Wire and Wire1 ...
 	 */
-	SSD1803A_I2C(uint8_t i2cAddr, uint8_t resetPin = 0xFF);
+	SSD1803A_I2C(uint8_t i2cAddr, TwoWire &i2cPort = Wire);
 
 	/**
 	 * @brief 
 	 * 
-	 * @param i2cPort alternatives I2C Ports, Wire and Wire1 ...
 	 * @param id display type DOGM201, DOGS164 or DOGS104
+	 * @param resetPin if available
 	 */
-	virtual void begin(display_t id);
-	virtual void begin(TwoWire &i2cPort, display_t id);
+	void begin(display_t id, uint8_t resetPin);
+	void begin(display_t id);
 
 	/**
 	 * @brief Clears the LCD screen and positions the cursor in the upper-left corner.
 	 * 
 	 */
 	void cls();
+
+	/**
+	 * @brief clear row, set cursor position of the row to the first position
+	 * 
+	 * @param row number of the row
+	 */
+	void clr(uint8_t row);
+
+	/**
+	 * @brief clear part, set cursor position of the row to first column
+	 * 
+	 * @param row number of the row
+	 * @param column number of the column
+	 * @param numbers of chars to delete
+	 */
+	void clp(uint8_t row, uint8_t column, uint8_t numbers);
 
 	/**
 	 * @brief Positions the cursor in the upper-left of the LCD. That is, use that location in outputting subsequent text to the display.
@@ -218,7 +254,7 @@ private:
 	display_t id;
 	uint8_t columns, rows;
 	uint8_t i2cAddr;
-	uint8_t resetPin;
+	uint8_t resetPin = 0xFF;
 	uint8_t entrymode;
 	uint8_t displaycontrol;
 	uint8_t ddramStart;
