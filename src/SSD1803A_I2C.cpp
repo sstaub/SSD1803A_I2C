@@ -1,5 +1,5 @@
 //	EA DOGM204 / DOGS164 / DOGS104 LCD Display with SSD1803A controller for 4x20
-//	Copyright(C) 2022 Stefan Staub under MIT license
+//	Copyright(C) 2022 - 2025 Stefan Staub under MIT license
 
 #include "SSD1803A_I2C.h"
 
@@ -130,7 +130,7 @@ void SSD1803A_I2C::locate(uint8_t row, uint8_t column) {
 		row = row - 1;
 		column = column - 1;
 		}
-	sendCommand(ddramStart | (row * 0x20 + column));
+	sendCommand(ddramStart + (row * 0x20 + column));
 	}
 
 void SSD1803A_I2C::display(dispmode_t mode) {
@@ -344,7 +344,7 @@ void SSD1803A_I2C::sendData(uint8_t val) {
 	i2cPort->beginTransmission(i2cAddr);
 	i2cPort->write(MODE_DATA);
 	i2cPort->write(val);
-	i2cPort->endTransmission();	
+	i2cPort->endTransmission();
 	}
 
 void SSD1803A_I2C::sendBuffer(const uint8_t *buffer, size_t size) {
