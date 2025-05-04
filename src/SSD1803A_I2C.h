@@ -1,5 +1,5 @@
 /**	EA DOGM204 / DOGS164 / DOGS104 LCD Display with SSD1803A controller for 4x20
- *Copyright(C) 2025 Stefan Staub under MIT license
+ *Copyright(C) 2022 - 2025 Stefan Staub under MIT license
 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -149,8 +149,7 @@ public:
 	 * @param id display type DOGM201, DOGS164 or DOGS104
 	 * @param resetPin if available
 	 */
-	void begin(display_t id, uint8_t resetPin);
-	void begin(display_t id);
+	void begin(display_t id, uint8_t resetPin = 0xFF);
 
 	/**
 	 * @brief Clears the LCD screen and positions the cursor in the upper-left corner.

@@ -11,32 +11,11 @@ SSD1803A_I2C::SSD1803A_I2C(uint8_t i2cAddr, TwoWire &i2cPort) {
 void SSD1803A_I2C::begin(display_t id, uint8_t resetPin) {
 	this->id = id;
 	this->resetPin = resetPin;
-	switch (id) {
-		case DOGM204:
-			columns = 20;
-			rows = 4;
-			break;
-		case DOGS164:
-			columns = 16;
-			rows = 4;
-			break;
-		case DOGS104:
-			columns = 10;
-			rows = 4;
-			break;
+	if (resetPin != 0xFF) {
+		pinMode(resetPin, OUTPUT);
+		digitalWrite(resetPin, HIGH);
+		delay(50);
 		}
-	ddramStart = ADDRESS_DDRAM;
-	lines = 4;
-	i2cPort->begin();
-	reset();
-	init();
-	cls();
-	entrymode = ENTRY_MODE_LEFT_TO_RIGHT;
-	sendCommand(COMMAND_ENTRY_MODE_SET | entrymode);
-	}
-
-void SSD1803A_I2C::begin(display_t id) {
-	this->id = id;
 	switch (id) {
 		case DOGM204:
 			columns = 20;
@@ -62,14 +41,10 @@ void SSD1803A_I2C::begin(display_t id) {
 	}
 
 void SSD1803A_I2C::reset() {
-	if (resetPin == 0xFF)
-		return;
-	delay(50);
-	pinMode(resetPin, OUTPUT);
+	if (resetPin == 0xFF) return;
 	digitalWrite(resetPin, LOW);
 	delay(4);
 	digitalWrite(resetPin, HIGH);
-	delay(20);
 	}
 
 void SSD1803A_I2C::init() {
