@@ -1,7 +1,7 @@
 # Arduino LCD I2C library for EA DOGM204 DOGS164 and DOGS104 with SDD1803A controller
 
 This library is for the following LCDs from Display Vision
-- EA DOGM204 (4x20)
+- DOGM204 (4x20)
 - DOGS164 (4x16)
 - DOGS104 (4x10)
 
@@ -129,10 +129,10 @@ void loop() {
 
 ## Constructor
 ```cpp
-SSD1803A_I2C(uint8_t i2cAddr, TwoWire &i2cPort)
+SSD1803A_I2C(uint8_t i2cAddr, TwoWire &i2cPort = WIRE)
 ```
 - **i2caddr** I2C address of the display, can 0x3D (SA0 = VDD) or 0x3C (SA0 = VSS)
-- **i2cPort** I2C Port, is only needed if you another interface than the standard Wire like Wire1 ...
+- **i2cPort** optional I2C Port, this is only needed if you another interface than the standard Wire like Wire1 ...
 
 Create a LCD object with a given address of the I2C interface.
 
@@ -146,11 +146,10 @@ SSD1803A_I2C lcd(i2caddr, Wire1); //initialize on Wire1
 
 ### **begin()**
 ```cpp
-void begin(display_t id, uint8_t resetPin)
-void begin(display_t id)
+void begin(display_t id, uint8_t resetPin = 0xFF)
 ```
 - **id** ID of the display DOGM204, DOGS164, DOGS104
-- **resetPin** reset pin if available
+- **resetPin** optional reset pin if available
 
 Initialize the display and an optional reset pin, this must done in `setup()`.
 
