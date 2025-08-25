@@ -85,7 +85,7 @@ void SSD1803A_I2C::clr(uint8_t row) {
 		locate(row, pos);
 		write(' ');
 		}
-	locate(row, 0);
+	locate(row, 1);
 	}
 
 void SSD1803A_I2C::clp(uint8_t row, uint8_t column, uint8_t numbers) {
